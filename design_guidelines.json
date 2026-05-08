@@ -1,0 +1,126 @@
+{
+  "project_name": "Kript",
+  "theme": "Dark",
+  "archetype": "Archetype 4 (Swiss & High-Contrast) + Archetype 7 (Cyber/Tech)",
+  "vibe": "Trustworthy, technical, precise, zero-knowledge security",
+  "global_rules": {
+    "language": "es",
+    "accessibility_standard": "WCAG 2.1 AA",
+    "test_attributes": "Must include data-testid for all interactive elements",
+    "component_strategy": "Shadcn highly customized for dark mode, sharp edges, no heavy cards. Raw HTML/Tailwind for landing."
+  },
+  "colors": {
+    "background": {
+      "base": "#0a1118",
+      "surface": "#0f1b2d",
+      "surface_elevated": "#16253b"
+    },
+    "primary": "#c6e08a",
+    "secondary": "#a8c6e0",
+    "text": {
+      "primary": "#ffffff",
+      "secondary": "#94a3b8",
+      "muted": "#64748b"
+    },
+    "border": {
+      "default": "rgba(168, 198, 224, 0.15)",
+      "hover": "rgba(198, 224, 138, 0.5)",
+      "active": "#c6e08a"
+    },
+    "feedback": {
+      "success": "#c6e08a",
+      "error": "#ff4d4f",
+      "warning": "#fbbf24"
+    }
+  },
+  "typography": {
+    "fonts": {
+      "logo_and_display": "Orbitron",
+      "headings": "Outfit",
+      "body": "IBM Plex Sans",
+      "monospace": "IBM Plex Mono"
+    },
+    "sizes": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl tracking-tighter font-black",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl tracking-tight font-bold",
+      "h3": "text-xl sm:text-2xl tracking-tight font-semibold",
+      "body": "text-base leading-relaxed",
+      "small": "text-sm",
+      "mono": "text-sm tracking-widest"
+    }
+  },
+  "spacing_and_layout": {
+    "strategy": "Generous spacing, architectural density for dashboard, bento grid for landing.",
+    "dashboard_grid": "grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6",
+    "landing_grid": "grid-cols-1 md:grid-cols-8 lg:grid-cols-12 gap-12",
+    "padding_scale": "p-4, p-6, p-8, p-12",
+    "border_radius": "rounded-none or rounded-sm (max 4px) for sharp technical feel"
+  },
+  "surfaces_and_micro_themes": {
+    "header": "Crystal Glass: backdrop-blur-xl bg-[#0f1b2d]/80 border-b border-[#a8c6e0]/10",
+    "dashboard_cards": "Grid Borders: Flat background #0f1b2d, 1px border border-[#a8c6e0]/15, no shadow. Hover: border-[#c6e08a]/50",
+    "landing_features": "Tracing Beam/Neon Glow: 1px border with subtle box-shadow glow using #c6e08a or #a8c6e0",
+    "generator_panel": "Retro-Futurism: Deep black bg #0a1118 with neon green #c6e08a borders/text for the generated password"
+  },
+  "key_components": {
+    "buttons": {
+      "primary": "bg-[#c6e08a] text-[#0a1118] font-bold hover:bg-[#b6d77a] transition-colors rounded-sm",
+      "secondary": "bg-transparent border border-[#a8c6e0] text-[#a8c6e0] hover:bg-[#a8c6e0]/10 transition-colors rounded-sm"
+    },
+    "inputs": {
+      "default": "bg-[#0a1118] border border-[#a8c6e0]/20 text-white focus:border-[#c6e08a] focus:ring-1 focus:ring-[#c6e08a] rounded-sm transition-all"
+    },
+    "password_generator": {
+      "slider": "accent-[#c6e08a]",
+      "strength_meter": "4-segment bar (red, yellow, blue, green)"
+    },
+    "vault_grid": {
+      "layout": "Dense list or grid, copying triggers subtle #c6e08a flash on the row"
+    }
+  },
+  "pages_and_features": {
+    "landing_page": {
+      "hero": "Zero-knowledge value prop, dark circuitry background, prominent CTA",
+      "features": "Bento grid explaining architecture (client-side encryption, master password)",
+      "authors": "About section for the academic team"
+    },
+    "auth": {
+      "login_register": "Clean centered modal, heavy emphasis/warning on master password unrecoverability"
+    },
+    "dashboard": {
+      "vault": "List of credentials, search bar, filter by category/domain",
+      "credential_modal": "Detail view with reveal password (requires confirmation), copy to clipboard"
+    }
+  },
+  "motion_and_interaction": {
+    "hover": "Subtle border color shifts, glow effects on text",
+    "copy_action": "Icon change to checkmark + toast notification (Sonner) + subtle row flash",
+    "page_transition": "Fade in, 0.2s ease"
+  },
+  "media": {
+    "icons_library": "lucide-react",
+    "images": [
+      {
+        "category": "hero_background",
+        "url": "https://images.unsplash.com/photo-1762279389042-9439bfb6c155?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwyfHxkYXJrJTIwYWJzdHJhY3QlMjB0ZWNobm9sb2d5JTIwYmFja2dyb3VuZHxlbnwwfHx8fDE3Nzc5NTYzNjh8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Abstract neon lines forming a digital landscape - use with heavy dark overlay"
+      },
+      {
+        "category": "architecture_background",
+        "url": "https://images.unsplash.com/photo-1631375937044-6dd5beac01d2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MjJ8MHwxfHNlYXJjaHwzfHxkYXJrJTIwbmVvbiUyMGNpcmN1aXRyeSUyMGJhY2tncm91bmR8ZW58MHx8fHwxNzc3OTU2MzY4fDA&ixlib=rb-4.1.0&q=85",
+        "description": "Close up of a computer motherboard in the dark - for zero knowledge section"
+      }
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Strictly adhere to the dark navy (#0f1b2d, #0a1118), lime green (#c6e08a), and sky blue (#a8c6e0) color palette. Do NOT introduce purples, pinks, or generic tech blues.",
+    "Use Orbitron for the 'KRIPT' logo and major headings, Outfit for subheadings, and IBM Plex Sans for body text.",
+    "Implement the UI in Spanish as requested.",
+    "Build the dashboard using a 'Control Room' dense grid, ensuring every interactive element has a data-testid.",
+    "Use standard Shadcn components but override their border-radii to be 'rounded-none' or 'rounded-sm' (max 4px) to fit the technical/cyber aesthetic.",
+    "Do not use generic Shadcn Cards for everything; use flat backgrounds with 1px borders (Grid Borders style).",
+    "For the Password Generator, make the generated password highly visible using 'IBM Plex Mono' in lime green on a deep black background.",
+    "Always apply a dark overlay (e.g., bg-[#0a1118]/80) over background images to ensure text readability.",
+    "Avoid generic 'Bootstrap' symmetry in the landing page; use asymmetry and bento grids."
+  ]
+}
