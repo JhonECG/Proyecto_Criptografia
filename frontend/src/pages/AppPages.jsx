@@ -6,6 +6,7 @@ import { useAuth } from "@/context/AuthContext";
 import { api, formatApiErrorDetail } from "@/lib/api";
 import CredentialModal from "@/components/kript/CredentialModal";
 import PasswordGenerator from "@/components/kript/PasswordGenerator";
+import BackupManager from "@/components/kript/BackupManager";
 import { toast } from "sonner";
 
 export function AppShell() {
@@ -226,6 +227,55 @@ export function GeneratorPage() {
 
 export function SettingsPage() {
   const { user } = useAuth();
+  const [creds, setCreds] = useState([]);
+  const [isImporting, setIsImporting] = useState(false);
+
+  async function loadCredentials() {
+    try {
+      const { data } = await api.get("/credentials");
+      setCreds(data);
+    } catch (err) {
+      console.error("Error al cargar credenciales para respaldo:", err);
+    }
+  }
+
+  useEffect(() => {
+    loadCredentials();
+  }, []);
+
+  const handleImportSuccess = async (importedData) => {
+    setIsImporting(true);
+    try {
+      const dataArray = Array.isArray(importedData) ? importedData : [importedData];
+      
+      // Guardar cada credencial importada en la API
+      for (const cred of dataArray) {
+        try {
+          await api.post("/credentials", {
+            name: cred.name || "Importado",
+            username: cred.username || "",
+            password: cred.password || "",
+            url: cred.url || "",
+            notes: cred.notes || "",
+            category: cred.category || "general",
+            favorite: cred.favorite || false,
+          });
+        } catch (err) {
+          console.warn("Error al guardar credencial individual:", err);
+        }
+      }
+      
+      // Recargar la lista completa
+      await loadCredentials();
+      toast.success(`${dataArray.length} credencial(es) importada(s) correctamente.`);
+    } catch (error) {
+      toast.error("Error al importar credenciales.");
+      console.error(error);
+    } finally {
+      setIsImporting(false);
+    }
+  };
+
   return (
     <div className="max-w-3xl mx-auto p-6 md:p-10">
       <div className="mb-6">
@@ -242,16 +292,9 @@ export function SettingsPage() {
           <div>{user?.name || "—"}</div>
         </div>
       </div>
-      <div className="card-kr p-6 mt-6">
-        <div className="text-[10px] font-mono-kr tracking-widest text-[var(--kript-secondary)] mb-2">EXPORT / IMPORT</div>
-        <p className="text-sm text-[var(--kript-text-dim)]">
-          La exportación e importación cifradas se habilitarán junto con la
-          criptografía de cliente (Argon2id + AES-GCM). Esta vista es el marcador
-          para la siguiente iteración del proyecto.
-        </p>
-      </div>
+      <BackupManager vaultData={creds} onImportSuccess={handleImportSuccess} isImporting={isImporting} />
       <div className="mt-8 text-xs text-[var(--kript-text-muted)] font-mono-kr tracking-widest">
-        <Link to="/" className="hover:text-[var(--kript-primary)]">← Volver al sitio</Link>
+        <Link to="/app" className="hover:text-[var(--kript-primary)]">← Volver al sitio</Link>
       </div>
     </div>
   );
