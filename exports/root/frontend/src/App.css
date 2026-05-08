@@ -1,2 +1,0 @@
-/* App-level overrides intentionally minimal; see index.css for global design system */
-.App { min-height: 100vh; background: var(--kript-bg); color: var(--kript-text); }
