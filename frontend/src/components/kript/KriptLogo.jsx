@@ -1,28 +1,18 @@
 import React from "react";
-import { Lock } from "lucide-react";
+import KriptSvg from "./Kript.svg";
 
 /**
- * Placeholder wordmark for "KRIPT".
- * User will replace with the official asset — keeps layout stable.
+ * Kript logo component using SVG asset.
  */
-export function KriptLogo({ size = 36, withText = true, className = "" }) {
+export function KriptLogo({ size = 400, withText = true, className = "" }) {
   return (
     <div className={`flex items-center gap-3 ${className}`} data-testid="kript-logo">
-      <div
-        className="relative flex items-center justify-center"
+      <img 
+        src={KriptSvg} 
+        alt="Kript Logo" 
         style={{ width: size, height: size }}
-      >
-        <div className="absolute inset-0 rounded-full border-2" style={{ borderColor: "var(--kript-primary)" }} />
-        <div
-          className="absolute rounded-full border"
-          style={{
-            inset: 4,
-            borderColor: "var(--kript-secondary)",
-            borderStyle: "dashed",
-          }}
-        />
-        <Lock size={size * 0.45} strokeWidth={2.25} style={{ color: "var(--kript-primary)" }} />
-      </div>
+        className="object-contain"
+      />
       {withText && (
         <span
           className="font-display font-black tracking-widest"

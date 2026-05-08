@@ -12,7 +12,7 @@ export default function LandingPage() {
       {/* Header */}
       <header className="sticky top-0 z-30 backdrop-blur-xl bg-[#0a1118]/80 border-b border-[rgba(168,198,224,0.1)]">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <KriptLogo size={32} />
+          <KriptLogo size={50} />
           <nav className="hidden md:flex items-center gap-8 text-sm text-[var(--kript-text-dim)]">
             <a href="#features" className="hover:text-[var(--kript-primary)] transition" data-testid="nav-features">Funciones</a>
             <a href="#architecture" className="hover:text-[var(--kript-primary)] transition" data-testid="nav-architecture">Arquitectura</a>

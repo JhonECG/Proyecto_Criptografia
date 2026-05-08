@@ -34,7 +34,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen grid lg:grid-cols-2 bg-[var(--kript-bg)]">
       <div className="hidden lg:flex flex-col justify-between p-10 border-r border-[rgba(168,198,224,0.1)] relative kript-grid">
-        <div className="relative z-10"><KriptLogo size={34} /></div>
+        <div className="relative z-10"><KriptLogo size={70} /></div>
         <div className="relative z-10 max-w-md">
           <div className="text-xs font-mono-kr tracking-widest text-[var(--kript-secondary)] mb-4">// CONTRASEÑA MAESTRA</div>
           <h2 className="font-display text-4xl font-black leading-tight">
