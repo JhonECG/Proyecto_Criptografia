@@ -4,6 +4,7 @@ import { Eye, EyeOff, ArrowLeft, KeyRound } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import KriptLogo from "@/components/kript/KriptLogo";
 import { toast } from "sonner";
+import { DEMO_LOGIN_CREDENTIALS, isDemoMode } from "@/lib/api";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -103,6 +104,16 @@ export default function LoginPage() {
               <KeyRound size={18} /> {loading ? "Desbloqueando…" : "Desbloquear bóveda"}
             </button>
           </form>
+
+          {isDemoMode() && (
+            <div className="mt-6 p-4 border border-[rgba(198,224,138,0.25)] bg-[rgba(198,224,138,0.06)] text-sm">
+              <div className="text-[10px] font-mono-kr tracking-widest text-[var(--kript-secondary)] mb-2">// CREDENCIAL BASE</div>
+              <div className="space-y-1 text-[var(--kript-text-dim)]">
+                <div><span className="text-[var(--kript-primary)]">Correo:</span> {DEMO_LOGIN_CREDENTIALS.email}</div>
+                <div><span className="text-[var(--kript-primary)]">Contraseña:</span> {DEMO_LOGIN_CREDENTIALS.password}</div>
+              </div>
+            </div>
+          )}
 
           <div className="mt-8 text-sm text-[var(--kript-text-dim)]">
             ¿No tienes cuenta?{" "}

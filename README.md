@@ -39,19 +39,22 @@ uvicorn server:app --reload
 
 ```
 
-### 2. Frontend (React)
+### 2. Frontend (Demo)
 
-En tu segunda terminal, navega a la carpeta del frontend. Usaremos yarn para manejar los paquetes:
+Modo Demo para presentación
 
 ```bash
-# 1. Entrar al directorio
+# entrar al directorio
 cd frontend
 
-# 2. Instalar Yarn de forma global (solo si no lo tienes instalado)
-npm install -g yarn
-
-# 3. Descargar las dependencias del proyecto
+# instalar dependencias
 yarn install
 
-# 4. Iniciar la aplicación web
-yarn start
+# arrancar en modo demo (sin backend)
+REACT_APP_BACKEND_URL= yarn start
+
+# (opcional) build de producción en modo demo
+REACT_APP_BACKEND_URL= yarn build
+
+```
+
