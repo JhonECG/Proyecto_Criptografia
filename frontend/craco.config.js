@@ -81,7 +81,4 @@ webpackConfig.devServer = (devServerConfig) => {
   return devServerConfig;
 };
 
-// Visual edits integration removed — not using emergent tooling.
-// If you want similar dev features, add your preferred plugin here.
-
 module.exports = webpackConfig;
