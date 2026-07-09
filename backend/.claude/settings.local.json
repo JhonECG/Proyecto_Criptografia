@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip3 list *)",
+      "Bash(python3 -m pip --version)",
+      "Bash(python3 -m pip list)",
+      "Bash(python3 -m ensurepip --version)",
+      "Bash(apt list *)",
+      "Bash(python3 -m venv /tmp/claude-1000/-mnt-c-Users-30110-Downloads-Proyecto-Criptografia-backend/5d08a73d-3290-43d8-9b95-de8008888bc6/scratchpad/venv)",
+      "Bash(/tmp/claude-1000/-mnt-c-Users-30110-Downloads-Proyecto-Criptografia-backend/5d08a73d-3290-43d8-9b95-de8008888bc6/scratchpad/venv/bin/python -m pip --version)",
+      "Bash(/tmp/claude-1000/-mnt-c-Users-30110-Downloads-Proyecto-Criptografia-backend/5d08a73d-3290-43d8-9b95-de8008888bc6/scratchpad/venv/bin/pip install *)",
+      "Bash(/tmp/claude-1000/-mnt-c-Users-30110-Downloads-Proyecto-Criptografia-backend/5d08a73d-3290-43d8-9b95-de8008888bc6/scratchpad/venv/bin/python -c 'import server')",
+      "Bash(dpkg -l)",
+      "Bash(apt-cache policy *)",
+      "Bash(apt-cache search *)",
+      "Bash(apt-get install *)",
+      "Bash(curl -sI https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-7.0.14.tgz --max-time 15)",
+      "Bash(curl -s -o mongo.tgz https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-7.0.14.tgz --max-time 120)",
+      "Bash(tar xzf *)",
+      "Bash(kill 3270)"
+    ]
+  }
+}

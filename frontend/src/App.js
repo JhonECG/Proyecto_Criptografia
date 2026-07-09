@@ -4,6 +4,7 @@ import { Toaster } from "sonner";
 import "@/App.css";
 
 import { AuthProvider } from "@/context/AuthContext";
+import { VaultProvider } from "@/context/VaultContext";
 import ProtectedRoute from "@/components/kript/ProtectedRoute";
 import LandingPage from "@/pages/Landing";
 import LoginPage from "@/pages/Login";
@@ -14,38 +15,40 @@ export default function App() {
   return (
     <div className="App">
       <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route
-              path="/app"
-              element={
-                <ProtectedRoute>
-                  <AppShell />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<VaultPage />} />
-              <Route path="generator" element={<GeneratorPage />} />
-              <Route path="settings" element={<SettingsPage />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-        <Toaster
-          theme="dark"
-          position="top-right"
-          toastOptions={{
-            style: {
-              background: "#0f1b2d",
-              border: "1px solid rgba(198,224,138,0.35)",
-              color: "#ffffff",
-              borderRadius: 2,
-              fontFamily: "IBM Plex Sans, sans-serif",
-            },
-          }}
-        />
+        <VaultProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route
+                path="/app"
+                element={
+                  <ProtectedRoute>
+                    <AppShell />
+                  </ProtectedRoute>
+                }
+              >
+                <Route index element={<VaultPage />} />
+                <Route path="generator" element={<GeneratorPage />} />
+                <Route path="settings" element={<SettingsPage />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+          <Toaster
+            theme="dark"
+            position="top-right"
+            toastOptions={{
+              style: {
+                background: "#0f1b2d",
+                border: "1px solid rgba(198,224,138,0.35)",
+                color: "#ffffff",
+                borderRadius: 2,
+                fontFamily: "IBM Plex Sans, sans-serif",
+              },
+            }}
+          />
+        </VaultProvider>
       </AuthProvider>
     </div>
   );
