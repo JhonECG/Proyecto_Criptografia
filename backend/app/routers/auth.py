@@ -64,7 +64,8 @@ async def _issue_tokens(user_id: str, response: Response) -> None:
 
 
 @router.post("/register", response_model=UserOut)
-async def register(payload: RegisterIn, response: Response):
+@limiter.limit("5/minute")
+async def register(request: Request, payload: RegisterIn, response: Response):
     username = payload.username.strip().lower()
     if await db.users.find_one({"username": username}):
         raise HTTPException(status_code=400, detail="El usuario ya está registrado")

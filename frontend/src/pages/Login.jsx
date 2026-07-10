@@ -160,7 +160,7 @@ export default function LoginPage() {
           </h2>
           <p className="mt-6 text-[var(--kript-text-dim)]">
             Tu contraseña maestra deriva la clave de tu bóveda localmente
-            con PBKDF2-SHA256. Ni nosotros ni nadie puede restaurarla si la
+            con Argon2id. Ni nosotros ni nadie puede restaurarla si la
             pierdes — esa es la garantía del modelo zero-knowledge.
           </p>
         </div>

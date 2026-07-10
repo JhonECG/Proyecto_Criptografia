@@ -45,7 +45,7 @@ Corresponde 1:1 al bloque "Cryptographic Module" del diagrama. Vive aislado en `
 
 - **Input:** master password + `Client Secret` (device-bound) + salt único de usuario (recibido/generado en registro).
 - **Output:** `Vault Key` (256 bits).
-- **Algoritmo:** Argon2id (preferido, resistente a GPU/ASIC) o PBKDF2-HMAC-SHA256 con ≥310,000 iteraciones si Argon2id no es viable en el navegador objetivo.
+- **Algoritmo (decidido):** PBKDF2-HMAC-SHA256 con 310,000 iteraciones, vía `SubtleCrypto` nativo — ver PRD backend §9.1 para la justificación (evita dependencia WASM de Argon2id). Implementado en `src/crypto/kdf.js`.
 - Se recalcula en cada sesión/desbloqueo — **nunca se persiste la Vault Key**, solo vive en memoria (`useRef`/estado no serializado).
 
 ### 3.2 AEAD Cipher (cifrado de entradas)
@@ -165,7 +165,7 @@ frontend/
 
 Estas preguntas del PRD del backend determinan implementación exacta en frontend:
 
-1. KDF exacto (Argon2id vs PBKDF2) y parámetros (iteraciones/memoria).
+1. ~~KDF exacto (Argon2id vs PBKDF2) y parámetros (iteraciones/memoria).~~ Decidido: PBKDF2-HMAC-SHA256, 310,000 iteraciones (ver PRD backend §9.1).
 2. Mecanismo de separación Auth Hash vs Vault Key (salts distintos vs HKDF con context strings).
 3. Estrategia de resolución de conflictos de versión (afecta directamente la UI del paso 7).
 4. Confirmar que no habrá "vincular dispositivo" fuera del flujo de export/import.

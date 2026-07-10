@@ -32,6 +32,11 @@ dist
 
 # Environment files (comprehensive coverage)
 
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env
 *token.json*
 *credentials.json*
 

@@ -1,18 +1,8 @@
-import axios from "axios";
-import { isDemoMode, API_BASE } from "@/api/authClient";
+import { isDemoMode, axiosInstance } from "@/api/authClient";
 
 // The vault is stored as a single encrypted blob.
-// In real mode: persisted as a special credential entry in /credentials.
+// In real mode: GET/PUT /vault — server-side optimistic concurrency via `version`.
 // In demo mode: persisted in localStorage keyed by userId.
-
-const VAULT_BLOB_NAME = "__kript_vault_blob__";
-const VAULT_BLOB_CATEGORY = "__vault__";
-
-const axiosInstance = axios.create({
-  baseURL: API_BASE || undefined,
-  withCredentials: true,
-  headers: { "Content-Type": "application/json" },
-});
 
 const DEMO_VAULT_STORE = "kript.vault.v2";
 
@@ -30,45 +20,32 @@ export async function fetchVault(userId) {
     const store = readDemoVaultStore();
     return store[userId] ?? null;
   }
-  const { data: creds } = await axiosInstance.get("/credentials");
-  const entry = creds.find(
-    (c) => c.name === VAULT_BLOB_NAME && c.category === VAULT_BLOB_CATEGORY
-  );
-  if (!entry) return null;
-  return { blob: entry.notes, version: parseInt(entry.username, 10) || 0, entryId: entry.id };
+  try {
+    const { data } = await axiosInstance.get("/vault");
+    return { blob: data.ciphertext, version: data.version };
+  } catch (e) {
+    if (e.response?.status === 404) return null;
+    throw e;
+  }
 }
 
 // Saves the encrypted blob and returns the new version number.
+// currentVersion must match the server's last-seen version (optimistic
+// concurrency) — a mismatch raises 409, surfaced to the caller as-is.
 export async function saveVault(userId, blob, currentVersion) {
-  const newVersion = currentVersion + 1;
-
   if (isDemoMode()) {
+    const newVersion = currentVersion + 1;
     const store = readDemoVaultStore();
     store[userId] = { blob, version: newVersion };
     writeDemoVaultStore(store);
     return newVersion;
   }
 
-  const { data: creds } = await axiosInstance.get("/credentials");
-  const existing = creds.find(
-    (c) => c.name === VAULT_BLOB_NAME && c.category === VAULT_BLOB_CATEGORY
-  );
-  const payload = {
-    name: VAULT_BLOB_NAME,
-    category: VAULT_BLOB_CATEGORY,
-    notes: blob,
-    username: String(newVersion),
-    password: "",
-    url: "",
-    favorite: false,
-  };
-
-  if (existing) {
-    await axiosInstance.put(`/credentials/${existing.id}`, payload);
-  } else {
-    await axiosInstance.post("/credentials", payload);
-  }
-  return newVersion;
+  const { data } = await axiosInstance.put("/vault", {
+    ciphertext: blob,
+    version: currentVersion,
+  });
+  return data.version;
 }
 
 // Lightweight poll to detect remote changes without downloading the full blob.
@@ -77,9 +54,11 @@ export async function fetchVaultMetadata(userId) {
     const store = readDemoVaultStore();
     return { version: store[userId]?.version ?? 0 };
   }
-  const { data: creds } = await axiosInstance.get("/credentials");
-  const entry = creds.find(
-    (c) => c.name === VAULT_BLOB_NAME && c.category === VAULT_BLOB_CATEGORY
-  );
-  return { version: entry ? parseInt(entry.username, 10) || 0 : 0 };
+  try {
+    const { data } = await axiosInstance.get("/vault/metadata");
+    return { version: data.version };
+  } catch (e) {
+    if (e.response?.status === 404) return { version: 0 };
+    throw e;
+  }
 }

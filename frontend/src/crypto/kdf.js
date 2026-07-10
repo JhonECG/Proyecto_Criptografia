@@ -1,49 +1,48 @@
-const PBKDF2_ITERATIONS = 310_000;
+import { argon2id } from "hash-wasm";
 
-async function importPasswordMaterial(password) {
-  return crypto.subtle.importKey(
-    "raw",
-    new TextEncoder().encode(password),
-    "PBKDF2",
-    false,
-    ["deriveBits", "deriveKey"]
-  );
+// RFC 9106 "moderate" profile, tuned for a one-shot client-side KDF (login/unlock).
+const ARGON2_PARALLELISM = 1;
+const ARGON2_ITERATIONS = 3;
+const ARGON2_MEMORY_KIB = 65_536; // 64 MiB
+const ARGON2_HASH_LENGTH = 32; // 256-bit output
+
+async function deriveArgon2Bits(password, salt) {
+  const hex = await argon2id({
+    password,
+    salt: new TextEncoder().encode(salt),
+    parallelism: ARGON2_PARALLELISM,
+    iterations: ARGON2_ITERATIONS,
+    memorySize: ARGON2_MEMORY_KIB,
+    hashLength: ARGON2_HASH_LENGTH,
+    outputType: "hex",
+  });
+  return hex;
+}
+
+async function importAesKey(hex) {
+  const raw = new Uint8Array(hex.match(/.{2}/g).map((b) => parseInt(b, 16)));
+  return crypto.subtle.importKey("raw", raw, { name: "AES-GCM" }, false, [
+    "encrypt",
+    "decrypt",
+  ]);
 }
 
 // Derives the AES-256-GCM Vault Key from masterPassword + clientSecret + vaultSalt.
 // clientSecret is device-bound (IndexedDB); vaultSalt is also device-bound.
 // Neither the masterPassword nor the resulting key leave the device.
 export async function deriveVaultKey(masterPassword, clientSecret, vaultSalt) {
-  const material = await importPasswordMaterial(masterPassword + ":" + clientSecret);
-  return crypto.subtle.deriveKey(
-    {
-      name: "PBKDF2",
-      salt: new TextEncoder().encode("kript:vault:" + vaultSalt),
-      iterations: PBKDF2_ITERATIONS,
-      hash: "SHA-256",
-    },
-    material,
-    { name: "AES-GCM", length: 256 },
-    false,
-    ["encrypt", "decrypt"]
+  const hex = await deriveArgon2Bits(
+    masterPassword + ":" + clientSecret,
+    "kript:vault:" + vaultSalt
   );
+  return importAesKey(hex);
 }
 
 // Derives the Auth Hash sent to the backend instead of the plain master password.
 // Uses a separate salt context so it cannot reconstruct the Vault Key.
 export async function deriveAuthHash(masterPassword, email) {
-  const material = await importPasswordMaterial(masterPassword);
-  const bits = await crypto.subtle.deriveBits(
-    {
-      name: "PBKDF2",
-      salt: new TextEncoder().encode("kript:auth:" + email.toLowerCase().trim()),
-      iterations: PBKDF2_ITERATIONS,
-      hash: "SHA-256",
-    },
-    material,
-    256
+  return deriveArgon2Bits(
+    masterPassword,
+    "kript:auth:" + email.toLowerCase().trim()
   );
-  return Array.from(new Uint8Array(bits))
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
 }

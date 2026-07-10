@@ -12,7 +12,7 @@ import { deriveExportKey } from "@/crypto/exportKey";
 import { randomBase64, randomHex } from "@/crypto/csprng";
 import { startAutoLock } from "@/crypto/autoLock";
 import { getDeviceKeys, setDeviceKeys } from "@/store/clientSecret";
-import { fetchVault, saveVault } from "@/api/vaultClient";
+import { fetchVault, saveVault, fetchVaultMetadata } from "@/api/vaultClient";
 
 const AUTO_LOCK_MS = 10 * 60 * 1000; // 10 minutes
 
@@ -162,7 +162,8 @@ export function VaultProvider({ children }) {
 
       const vaultKey = await deriveVaultKey(masterPassword, clientSecret, vaultSalt);
       const encryptedBlob = await encryptData(importedCreds, vaultKey);
-      const newVersion = await saveVault(userIdParam, encryptedBlob, 0);
+      const { version: currentVersion } = await fetchVaultMetadata(userIdParam);
+      const newVersion = await saveVault(userIdParam, encryptedBlob, currentVersion);
 
       vaultKeyRef.current = vaultKey;
       setCredentials(importedCreds);

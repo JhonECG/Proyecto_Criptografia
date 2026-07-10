@@ -13,6 +13,7 @@ from slowapi.errors import RateLimitExceeded
 
 from app.config import get_settings
 from app.core.rate_limit import limiter
+from app.core.security_headers import SecurityHeadersMiddleware
 from app.database import close_db_connection, create_indexes
 from app.routers import auth, generator, vault
 
@@ -50,6 +51,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# CSP + cabeceras de seguridad — mitigan XSS/clickjacking contra la Vault Key
+# en memoria (PRD frontend, sección de seguridad). HSTS solo tiene efecto
+# real detrás de HTTPS; en dev local (cookie_secure=False) se desactiva.
+app.add_middleware(SecurityHeadersMiddleware, hsts=settings.cookie_secure)
 
 
 @app.on_event("startup")

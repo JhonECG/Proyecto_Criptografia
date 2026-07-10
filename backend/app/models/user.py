@@ -7,5 +7,5 @@ from pydantic import BaseModel
 class UserInDB(BaseModel):
     id: str
     username: str
-    auth_hash: str  # bcrypt/argon2 sobre el auth hash ya derivado en el cliente
+    auth_hash: str  # bcrypt sobre el Argon2id auth hash ya derivado en el cliente
     created_at: datetime

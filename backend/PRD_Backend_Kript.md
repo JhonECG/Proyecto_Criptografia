@@ -192,7 +192,7 @@ MAX_BLOB_SIZE_KB=512
 
 ## 9. Preguntas abiertas antes de generar código
 
-1. **KDF exacto:** ¿Argon2id o PBKDF2-HMAC-SHA256 para derivar Vault Key / Auth Hash / Export Key en el cliente? (Afecta al frontend, pero conviene fijarlo ya para documentarlo como contrato).
+1. ~~**KDF exacto:** ¿Argon2id o PBKDF2-HMAC-SHA256 para derivar Vault Key / Auth Hash / Export Key en el cliente?~~ **Decidido: PBKDF2-HMAC-SHA256, 310,000 iteraciones.** Implementado en `frontend/src/crypto/kdf.js` y `exportKey.js`. Motivo: `Web Crypto API` (`SubtleCrypto`) trae PBKDF2 nativo en todos los navegadores objetivo sin dependencias WASM adicionales (`argon2-browser` no es nativo y añade superficie/tamaño de bundle); 310k iteraciones supera el mínimo OWASP 2023 para SHA-256 (210k). Argon2id queda como mejora futura si se justifica la dependencia WASM — no bloqueante para el MVP.
 2. **Separación Auth Hash vs Vault Key:** ¿se logra con salts distintos sobre el mismo KDF, o con un "context string" distinto (ej. HKDF con info="auth" vs info="vault")? Definir el mecanismo exacto.
 3. **Conflictos de versión:** cuando `/vault PUT` devuelve `409`, ¿el cliente hace last-write-wins forzado, o hay que soportar merge/resolución manual en el frontend?
 4. **Client Secret device-bound:** ¿cómo se sincroniza (o no) entre dispositivos? Por el diagrama, parece que la única vía es el export/import cifrado con Export Key — confirmar que no se espera ningún endpoint de "vincular dispositivo".
